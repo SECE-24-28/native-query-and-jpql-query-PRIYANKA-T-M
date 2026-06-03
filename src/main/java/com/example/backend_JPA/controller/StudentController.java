@@ -1,8 +1,11 @@
 package com.example.backend_JPA.controller;
 
+import com.example.backend_JPA.dto.StudentDto;
 import com.example.backend_JPA.model.Student;
 import com.example.backend_JPA.service.StudentService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,20 +22,20 @@ public class StudentController {
         return s.getAllStudents();
     }
 
-    @PostMapping("create-student")
-    public String addStudent(@RequestBody Student student){
-        Student res=s.addStudent(student);
-        if(res!=null){
-            return "Student added successfully";
-        }
-        else{
-            return "Student not added";
-        }
-
-
-    }
+//    @PostMapping("create-student")
+//    public String addStudent(@Valid @RequestBody Student student){
+//        Student res=s.addStudent(student);
+//        if(res!=null){
+//            return "Student added successfully";
+//        }
+//        else{
+//            return "Student not added";
+//        }
+//
+//
+//    }
     @PostMapping("create-students")
-    public String addStudents(@RequestBody List<Student>stuList){
+    public String addStudents(@Valid @RequestBody List<Student>stuList){
         List<Student> students= s.addStudents(stuList);
         if(students!=null){
             return "Students added successfully";
@@ -43,11 +46,11 @@ public class StudentController {
     }
 
     @GetMapping("get-student/{rollNo}")
-    public Student getStudentByRollNo(@PathVariable String rollNo){
+    public Student getStudentByRollNo(@PathVariable int rollNo){
         return s.getStudentByRollNo(rollNo);
     }
     @PutMapping("update-student")
-    public String updateStudent(@RequestBody Student student){
+    public String updateStudent(@Valid @RequestBody Student student){
         Student stu=s.updateStudent(student);
         if(stu!=null){
             return "Student updated successfully";
@@ -62,7 +65,7 @@ public class StudentController {
         return "All Students have been deleted successfully";
     }
     @DeleteMapping("delete/{rollNo}")
-    public String deleteStudentByRollNo(@PathVariable String rollNo){
+    public String deleteStudentByRollNo(@PathVariable int rollNo){
         s.deleteStudentByRollNo(rollNo);
         return "Student with rollNo: "+rollNo +"have been deleted successfully";
     }
@@ -93,7 +96,18 @@ public class StudentController {
 
     @GetMapping("/name")
     public List<Student> getByName(@Param("name") String name){
+
         return s.getByName(name);
+    }
+
+    @GetMapping("student/{rollNo}")
+    public StudentDto getStudent1(int rollNo){
+        return s.getStudentByRollNo1(rollNo);
+    }
+    //pagination
+    @GetMapping("students")
+    public Page<Student> getAllStudents(@RequestParam("page") int page,@RequestParam("size") int size){
+        return s.getAllStudent(page,size);
     }
 
 

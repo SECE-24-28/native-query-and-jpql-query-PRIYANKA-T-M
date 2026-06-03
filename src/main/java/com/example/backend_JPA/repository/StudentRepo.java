@@ -11,7 +11,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface StudentRepo extends JpaRepository<Student, String> {
+public interface StudentRepo extends JpaRepository<Student, Integer> {
+    Student findByRollNo(int rollNo);
     public List<Student> findByTechAndGender(String tech,String gender);
     public List<Student> findByTech(String tech);
     public List<Student> findByGender(String gender);
